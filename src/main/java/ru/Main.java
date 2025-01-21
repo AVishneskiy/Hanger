@@ -13,27 +13,42 @@ public class Main {
         print("Добро пожаловать в игру Виселица!\n");
         print("Вам нужно отгадать слово, у вас есть 6 попыток\n");
         prepareGame();
-
+        print(Arrays.toString(wordForGuessing));
         while (true) {
-            if (countOfLife == 0) {
-                print("Вы проиграли!");
-                print("Было загадано слово: ");
-                print(Arrays.toString(wordForGuessing));
-                print("\n");
-                print("Если хотите начать игру заново введите \"Д\", если хотите завершить игру введите \"Н\".\n");
-                String answer = write();
-                if (answer.equalsIgnoreCase("Д")) {
-                    prepareGame();
-                } else {
-                    return;
-                }
-            }
+            if (checkEndGame()) return;
             writeInformationForPlayer();
             String letter = write();
             compareAnswerOfPlayer(letter);
             drawHangman();
         }
     }
+
+    private static boolean checkEndGame() {
+        if (countOfLife == 0) {
+            print("Вы проиграли!");
+            print("Было загадано слово: ");
+            print(Arrays.toString(wordForGuessing));
+            print("\n");
+            return askAboutEndGame();
+        }
+        if (Arrays.equals(wordForGuessing, wordWhichGuessPlayer)) {
+            print("Вы выиграли.\n");
+            return askAboutEndGame();
+        }
+        return false;
+    }
+
+    private static boolean askAboutEndGame() {
+        print("Если хотите начать игру заново введите \"Д\", если хотите завершить игру введите \"Н\".\n");
+        String answer = write();
+        if (answer.equalsIgnoreCase("Д")) {
+            prepareGame();
+        } else {
+            return true;
+        }
+        return false;
+    }
+
 
     public static void writeInformationForPlayer() {
         print("Введите букву которую хотите угадать.\n");

@@ -13,7 +13,6 @@ public class Main {
         print("Добро пожаловать в игру Виселица!\n");
         print("Вам нужно отгадать слово, у вас есть 6 попыток\n");
         prepareGame();
-        print(wordForGuessing.toString());
         while (true) {
             if (checkEndGame()) return;
             writeInformationForPlayer();

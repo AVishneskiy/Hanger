@@ -5,15 +5,15 @@ import java.util.*;
 
 public class Main {
     public static int countOfLife;
-    public static String[] wordForGuessing;
-    public static String[] wordWhichGuessPlayer;
+    public static List<String> wordForGuessing;
+    public static List<String> wordWhichGuessPlayer;
     public static Set<String> triedLetter = new HashSet<>();
 
     public static void main(String[] args) {
         print("Добро пожаловать в игру Виселица!\n");
         print("Вам нужно отгадать слово, у вас есть 6 попыток\n");
         prepareGame();
-        print(Arrays.toString(wordForGuessing));
+        print(wordForGuessing.toString());
         while (true) {
             if (checkEndGame()) return;
             writeInformationForPlayer();
@@ -27,11 +27,11 @@ public class Main {
         if (countOfLife == 0) {
             print("Вы проиграли!");
             print("Было загадано слово: ");
-            print(Arrays.toString(wordForGuessing));
+            print(wordForGuessing.toString());
             print("\n");
             return askAboutEndGame();
         }
-        if (Arrays.equals(wordForGuessing, wordWhichGuessPlayer)) {
+        if (wordForGuessing.equals(wordWhichGuessPlayer)) {
             print("Вы выиграли.\n");
             return askAboutEndGame();
         }
@@ -58,15 +58,15 @@ public class Main {
             triedLetter.forEach(Main::print);
             print("\n");
         }
-        print(Arrays.toString(wordWhichGuessPlayer));
+        print(wordWhichGuessPlayer.toString());
         print("\n");
     }
 
     public static void compareAnswerOfPlayer(String letter) {
         boolean isWasGuessedLetter = false;
-        for (int i = 0; i < wordForGuessing.length; i++) {
-            if (wordForGuessing[i].equalsIgnoreCase(letter)) {
-                wordWhichGuessPlayer[i] = letter;
+        for (int i = 0; i < wordForGuessing.size(); i++) {
+            if (wordForGuessing.get(i).equalsIgnoreCase(letter)) {
+                wordWhichGuessPlayer.set(i, letter);
                 isWasGuessedLetter = true;
             }
         }
@@ -156,19 +156,19 @@ public class Main {
     public static void prepareGame() {
         countOfLife = 6;
         wordForGuessing = getWord();
-        wordWhichGuessPlayer = new String[wordForGuessing.length];
-        for (int i = 0; i < wordForGuessing.length; i++) {
-            wordWhichGuessPlayer[i] = "*";
+        wordWhichGuessPlayer = new ArrayList<>();
+        for (int i = 0; i < wordForGuessing.size(); i++) {
+            wordWhichGuessPlayer.add("*");
         }
         triedLetter = new HashSet<>();
     }
 
-    public static String[] getWord() {
+    public static List<String> getWord() {
         try (BufferedReader fileReader = new BufferedReader(new FileReader("src/main/resources/dictionary.txt"))) {
             String line = fileReader.readLine();
             String[] dictionary = line.split(",");
             int randomNumber = (int) (Math.random() * 99);
-            return dictionary[randomNumber].trim().split("");
+            return List.of(dictionary[randomNumber].trim().split(""));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
